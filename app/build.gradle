@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 28
@@ -37,6 +38,7 @@ android {
         debug {
 //            buildConfigField "String", "CHROMECAST_APP_ID", "\"39E8D587\"" // prod
             buildConfigField "String", "CHROMECAST_APP_ID", "\"29A66E17\"" // dev
+            testCoverageEnabled true
         }
     }
     flavorDimensions "skytube"
