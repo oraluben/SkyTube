@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity {
 	private boolean dontAddToBackStack = false;
 
 	/** Set to true of the UpdatesCheckerTask has run; false otherwise. */
-	private static boolean updatesCheckerTaskRan = false;
+	private static boolean updatesCheckerTaskRan = true;
 
 	public static final String ACTION_VIEW_CHANNEL = "MainActivity.ViewChannel";
 	public static final String ACTION_VIEW_FEED = "MainActivity.ViewFeed";
