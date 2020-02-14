@@ -288,7 +288,12 @@ public class YouTubePlayerV2Fragment extends ImmersiveModeFragment implements Yo
 	private synchronized void setupPlayer() {
 		if (playerView.getPlayer() == null) {
 			if (player == null) {
-				player = createExoPlayer();
+				DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+
+				TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+				DefaultTrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+				player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
 			} else {
 				Logger.i(this, ">> found already existing player, re-using it, to avoid duplicate usage");
 			}
@@ -523,12 +528,11 @@ public class YouTubePlayerV2Fragment extends ImmersiveModeFragment implements Yo
 				return true;
 
 			case R.id.menu_open_video_with:
-				player.setPlayWhenReady(false);
 				youTubeVideo.playVideoExternally(getContext());
+				player.stop();
 				return true;
 
 			case R.id.share:
-				player.setPlayWhenReady(false);
 				youTubeVideo.shareVideo(getContext());
 				return true;
 
@@ -561,7 +565,6 @@ public class YouTubePlayerV2Fragment extends ImmersiveModeFragment implements Yo
 
 			case R.id.block_channel:
 				youTubeChannel.blockChannel();
-				return true;
 			case R.id.disable_gestures:
 				boolean disableGestures = !item.isChecked();
 				item.setChecked(disableGestures);
