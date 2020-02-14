@@ -49,66 +49,42 @@ public class MobileNetworkWarningDialog extends SkyTubeMaterialDialog {
 	 *
 	 * @param actionType    Action Type:  either video downloads or video streaming.
 	 *
-	 * @return Policy which needs to be followed, either BLOCK or ALLOW - or ASK, when a warning dialog is displayed.
+	 * @return True if the dialog was displayed; false otherwise.
 	 */
-	public Policy showAndGetStatus(ActionType actionType) {
-		final Policy displayWarning  = SkyTubeApp.getSettings().getWarningMobilePolicy();
+	public boolean showAndGetStatus(ActionType actionType) {
+		final boolean displayWarning  = SkyTubeApp.getPreferenceManager().getBoolean(SkyTubeApp.getStr(R.string.pref_key_warn_mobile_downloads), true);
 
-		if (SkyTubeApp.isConnectedToMobile()) {
-			switch (displayWarning) {
-				case BLOCK : {
-					Toast.makeText(getContext(), R.string.mobile_data_blocked_by_policy, Toast.LENGTH_LONG).show();
-					if (cancelListener != null) {
-						cancelListener.onCancel(null);
-					}
-					return Policy.BLOCK;
-				}
-				case ALLOW : {
-					return Policy.ALLOW;
-				}
-				case ASK : {
-					title(R.string.mobile_data);
-					content(actionType == ActionType.STREAM_VIDEO ? R.string.warning_mobile_network_play : R.string.warning_mobile_network_download);
-					checkBoxPromptRes(R.string.warning_mobile_network_disable, false, null);
-					positiveText(actionType == ActionType.STREAM_VIDEO ?  R.string.play_video : R.string.download_video);
-					show();
-					return Policy.ASK;
-				}
-			}
+		if (SkyTubeApp.isConnectedToMobile() && displayWarning) {
+			title(R.string.mobile_data);
+			content(actionType == ActionType.STREAM_VIDEO ? R.string.warning_mobile_network_play : R.string.warning_mobile_network_download);
+			checkBoxPromptRes(R.string.warning_mobile_network_disable, false, (buttonView, isChecked) -> SkyTubeApp.getPreferenceManager().edit().putBoolean(SkyTubeApp.getStr(R.string.pref_key_warn_mobile_downloads), !isChecked).apply());
+			positiveText(actionType == ActionType.STREAM_VIDEO ?  R.string.play_video : R.string.download_video);
+			show();
+			return true;
 		}
 
-		return Policy.ALLOW;
+		return false;
 	}
 
 	/**
 	 * Display a warning about downloading this video.
 	 * @param youTubeVideo
-	 * @return Policy which needs to be followed, either BLOCK or ALLOW - or ASK, when a warning dialog is displayed.
+	 * @return true, if it's on mobile, and warning is displayed.
 	 */
-	public Policy showDownloadWarning(YouTubeVideo youTubeVideo) {
+	public boolean showDownloadWarning(YouTubeVideo youTubeVideo) {
 		onPositive((dialog, which) -> youTubeVideo.downloadVideo(getContext()));
 		return showAndGetStatus(MobileNetworkWarningDialog.ActionType.DOWNLOAD_VIDEO);
 	}
 
 	@Override
 	public MobileNetworkWarningDialog onPositive(@NonNull MaterialDialog.SingleButtonCallback callback) {
-		this.onPositiveCallback = (dialog, action) -> {
-            if (dialog.isPromptCheckBoxChecked()) {
-                SkyTubeApp.getSettings().setWarningMobilePolicy(Policy.ALLOW);
-            }
-            callback.onClick(dialog, action);
-        };
+		this.onPositiveCallback = callback;
 		return this;
 	}
 
 	@Override
 	public MobileNetworkWarningDialog onNegativeOrCancel(@NonNull DialogInterface.OnCancelListener callback) {
-		this.onNegativeCallback = (dialog, action) -> {
-		    if (dialog.isPromptCheckBoxChecked()) {
-                SkyTubeApp.getSettings().setWarningMobilePolicy(Policy.BLOCK);
-            }
-            // no need to call the 'callback', as the cancelListener will be called.
-        };
+		this.onNegativeCallback = (dialog, action) -> callback.onCancel(dialog);
 		this.cancelListener = callback;
 		return this;
 	}

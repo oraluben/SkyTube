@@ -388,18 +388,18 @@ public class YouTubePlayerV2Fragment extends ImmersiveModeFragment implements Yo
 	 *                                 using mobile network data (i.e. 4g).
 	 */
 	private void loadVideo(boolean showMobileNetworkWarning) {
-		Policy decision = Policy.ALLOW;
+		boolean mobileNetworkWarningDialogDisplayed = false;
         DownloadedVideosDb.Status downloadStatus = DownloadedVideosDb.getVideoDownloadsDb().getVideoFileUriAndValidate(youTubeVideo.getId());
 
 		// if the user is using mobile network (i.e. 4g), then warn him
 		if (showMobileNetworkWarning && downloadStatus.getUri() == null) {
-			decision = new MobileNetworkWarningDialog(getActivity())
+			mobileNetworkWarningDialogDisplayed = new MobileNetworkWarningDialog(getActivity())
 					.onPositive((dialog, which) -> loadVideo(false))
 					.onNegativeOrCancel((dialog) -> closeActivity())
 					.showAndGetStatus(MobileNetworkWarningDialog.ActionType.STREAM_VIDEO);
 		}
 
-		if (decision == Policy.ALLOW) {
+		if (!mobileNetworkWarningDialogDisplayed) {
 			// if the video is NOT live
 			if (!youTubeVideo.isLiveStream()) {
 				loadingVideoView.setVisibility(View.VISIBLE);
@@ -555,10 +555,10 @@ public class YouTubePlayerV2Fragment extends ImmersiveModeFragment implements Yo
 				return true;
 
 			case R.id.download_video:
-				final Policy decision = new MobileNetworkWarningDialog(getContext())
+				final boolean warningDialogDisplayed = new MobileNetworkWarningDialog(getContext())
 						.showDownloadWarning(youTubeVideo);
 
-				if (decision == Policy.ALLOW) {
+				if (!warningDialogDisplayed) {
 					youTubeVideo.downloadVideo(getContext());
 				}
 				return true;

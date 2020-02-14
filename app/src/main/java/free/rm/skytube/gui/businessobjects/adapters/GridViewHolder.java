@@ -233,10 +233,10 @@ public class GridViewHolder extends RecyclerView.ViewHolder implements Serializa
 					youTubeVideo.removeDownload();
 					return true;
 				case R.id.download_video:
-					final Policy decision = new MobileNetworkWarningDialog(view.getContext())
+					final boolean warningDialogDisplayed = new MobileNetworkWarningDialog(view.getContext())
 							.showDownloadWarning(youTubeVideo);
 
-					if (decision == Policy.ALLOW) {
+					if (!warningDialogDisplayed) {
 						youTubeVideo.downloadVideo(context);
 					}
 					return true;
