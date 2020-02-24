@@ -67,7 +67,7 @@ public class YouTubePlayerActivity extends BaseActivity implements YouTubePlayer
 		setContentView(R.layout.activity_main);
 
 		// if the tutorial was previously displayed, the just "install" the video player fragment
-		if (SkyTubeApp.getSettings().wasTutorialDisplayedBefore()) {
+		if (true || SkyTubeApp.getSettings().wasTutorialDisplayedBefore()) {
 			installNewVideoPlayerFragment(useDefaultPlayer);
 		} else {
 			// display the tutorial
