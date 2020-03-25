@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
 
 		// check for updates (one time only)
 		if (!updatesCheckerTaskRan) {
-			new UpdatesCheckerTask(this, false).executeInParallel();
+//			new UpdatesCheckerTask(this, false).executeInParallel();
 			updatesCheckerTaskRan = true;
 		}
 
