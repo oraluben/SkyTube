@@ -50,13 +50,12 @@
     <PreferenceCategory
 	    android:title="@string/pref_languages_filter_category">
 
-        <ListPreference
-            android:key="@string/pref_key_preferred_region"
-            android:title="@string/pref_title_preferred_regions"
-            android:summary="@string/pref_summary_preferred_regions"
-            android:entries="@array/country_names"
-            android:entryValues="@array/country_codes"
-            android:defaultValue=""/>
+<!--        <ListPreference-->
+<!--            android:key="@string/pref_key_preferred_region"-->
+<!--            android:title="@string/pref_title_preferred_regions"-->
+<!--            android:summary="@string/pref_summary_preferred_regions"-->
+<!--            android:entries="@array/country_names"-->
+<!--            android:entryValues="@array/country_codes"/>-->
 
         <Preference
             android:key="@string/pref_key_preferred_languages"

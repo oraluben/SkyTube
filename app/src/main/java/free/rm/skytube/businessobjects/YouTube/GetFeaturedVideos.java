@@ -110,9 +110,10 @@ public class GetFeaturedVideos extends GetYouTubeVideos {
 
 
 	private String getPreferredRegion() {
-		String region = SkyTubeApp.getPreferenceManager()
-				.getString(SkyTubeApp.getStr(R.string.pref_key_preferred_region), "").trim();
-		return (region.isEmpty() ? null : region);
+//		String region = SkyTubeApp.getPreferenceManager()
+//				.getString(SkyTubeApp.getStr(R.string.pref_key_preferred_region), "").trim();
+//		return (region.isEmpty() ? null : region);
+		return null;
 	}
 
 

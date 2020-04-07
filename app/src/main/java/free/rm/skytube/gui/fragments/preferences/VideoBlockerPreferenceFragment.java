@@ -68,13 +68,10 @@ public class VideoBlockerPreferenceFragment extends PreferenceFragment {
 		};
 
 		// preferred region
-		findPreference(getString(R.string.pref_key_preferred_region)).setOnPreferenceChangeListener(settingUpdatesPreferenceChange);
+//		findPreference(getString(R.string.pref_key_preferred_region)).setOnPreferenceChangeListener(settingUpdatesPreferenceChange);
 
 		// preferred language(s)
-		findPreference(getString(R.string.pref_key_preferred_languages)).setOnPreferenceClickListener(preference -> {
-			new PreferredLanguageDialog(getActivity()).show();
-			return true;
-		});
+		findPreference(getString(R.string.pref_key_preferred_languages)).setOnPreferenceClickListener(preference -> true);
 		findPreference(getString(R.string.pref_key_lang_detection_video_filtering)).setOnPreferenceChangeListener(settingUpdatesPreferenceChange);
 		findPreference(getString(R.string.pref_key_low_views_filter)).setOnPreferenceChangeListener(settingUpdatesPreferenceChange);
 		findPreference(getString(R.string.pref_key_dislikes_filter)).setOnPreferenceChangeListener(settingUpdatesPreferenceChange);
